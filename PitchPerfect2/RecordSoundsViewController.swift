@@ -20,6 +20,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var recordingLabel: UILabel!
     @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var pauseResumeButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,10 +61,12 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         if (inProgress) {
             recordButton.enabled = false
             recordingLabel.text = "recording..."
+            pauseResumeButton.hidden = false
             stopButton.hidden = false
         } else {
             recordButton.enabled = true
             recordingLabel.text = "tap to record"
+            pauseResumeButton.hidden = true
             stopButton.hidden = true
         }
     }
@@ -87,6 +90,20 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         audioRecorder.prepareToRecord()
         audioRecorder.record()
     }
+    
+    
+    @IBAction func togglePauseResumeRecording(sender: UIButton) {
+        if sender.imageForState(UIControlState.Normal) == UIImage(named: "Pause") {
+            audioRecorder.pause()
+            recordingLabel.text = "recording paused"
+            pauseResumeButton.setImage(UIImage(named: "Resume"), forState: UIControlState.Normal)
+        } else {
+            audioRecorder.record()
+            recordingLabel.text = "recording..."
+            pauseResumeButton.setImage(UIImage(named: "Pause"), forState: UIControlState.Normal)
+        }
+    }
+
     
     @IBAction func stopRecording(sender: UIButton) {
         setUIRecordingMode(false)
